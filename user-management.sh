@@ -24,15 +24,15 @@ delete_user(){
     read -r -p "The name of the user to delete: " username
 
     if id -u "$username" &>/dev/null; then # Again asking for the id of the user with "$username"
-       read -r -p "Are u sure that u want to delete the user ['$username']? (Y/N): "  var_delete
+       read -r -p "Are u sure that u want to delete the user $username ? (Y/N): "  var_delete
        if [[ ${var_delete,,} = "y" ]]; then # Convertes var_delete to lowercase, [[]] probaly [] dont support this new operations. We use {} so ",," are interpreted as operator and not the name of the variable
-            userdel -r "$username"
-            echo "User '$username' deleted successefully"
+            userdel -r $username
+            echo "User $username deleted successefully"
        else
             echo "Operation cancelled!"
        fi
     else
-        echo "User '$username' not found!"
+        echo "User $username not found!"
     fi 
 }
 
@@ -42,16 +42,20 @@ listAll_user(){
     # We have 2 different types of users the humans and the services created by the system
 }
 
-block_user(){
-
-}
-
-unblock_user(){
-
-}
-
 change_password(){
-    
+    read -r -p "Which user do u want to reset the password?" username
+
+    if id -u $username &>/dev/null; then
+        read -r -p "Are u sure that u want to delete the user $username? (Y/N:) " var_delete
+        if [[ $var_delete = "y" ]]; then
+            sudo passwd $username
+            echo "Password changed with success"
+        else
+            echo "Operation cancelled!"
+        fi
+    else 
+        echo "User dont found"
+    fi
 }
 
 listAll_user
